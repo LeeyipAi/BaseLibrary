@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".usercenter.ui.activity.MainActivity">
 
     <TextView
-        style="@style/MatchWrap"
+        android:id="@+id/text"
+        style="@style/MatchMatch"
+        android:gravity="center"
+        android:textSize="60dp"
         android:text="JmmFx"
         />
 </FrameLayout>

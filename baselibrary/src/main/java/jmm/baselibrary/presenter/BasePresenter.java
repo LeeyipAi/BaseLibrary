@@ -8,5 +8,5 @@ import jmm.baselibrary.presenter.view.BaseView;
  * package_name:jmm.baselibrary.presenter
  */
 public class BasePresenter<V extends BaseView> {
-
+    public V mView;
 }

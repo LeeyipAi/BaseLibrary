@@ -3,6 +3,8 @@ package jmm.baselibrary.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+
 import jmm.baselibrary.common.BaseApplication;
 import jmm.baselibrary.injection.compoent.ActivityCompoent;
 import jmm.baselibrary.injection.compoent.DaggerActivityCompoent;
@@ -22,7 +24,10 @@ public abstract class BaseMvpActivity<T extends BasePresenter> extends BaseActiv
 
     private ProgressLoading mProgressLoading;
 
-    private ActivityCompoent mActivityCompoent;
+    @Inject
+    public T mPresenter;
+
+    public ActivityCompoent mActivityCompoent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
