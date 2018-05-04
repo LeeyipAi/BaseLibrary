@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Baselibrary</string>
+
+    <string name="nav_bar_home">主页</string>
+    <string name="nav_bar_notice">通知</string>
+    <string name="nav_bar_order">订单</string>
+    <string name="nav_bar_user">我的</string>
 </resources>

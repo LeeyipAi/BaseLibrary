@@ -1,7 +1,7 @@
 package com.jmm.fx.usercenter.injection.compoent;
 
 import com.jmm.fx.usercenter.injection.modules.UserModule;
-import com.jmm.fx.usercenter.ui.activity.MainActivity;
+import com.jmm.fx.ui.activity.MainActivity;
 
 import dagger.Component;
 import jmm.baselibrary.injection.PreCompoentScope;

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:name="jmm.baselibrary.common.BaseApplication"
         android:theme="@style/AppTheme">
-        <activity android:name=".usercenter.ui.activity.MainActivity">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".usercenter.ui.activity.MainActivity">
+    android:orientation="vertical"
+    android:gravity="bottom"
+    style="@style/MatchMatch"
+    tools:context=".ui.activity.MainActivity">
 
-    <TextView
-        android:id="@+id/text"
-        style="@style/MatchMatch"
-        android:gravity="center"
-        android:textSize="60dp"
-        android:text="JmmFx"
+
+    <FrameLayout
+        android:id="@+id/fl_contaier"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+    <jmm.baselibrary.widgets.BottomNavBar
+        android:id="@+id/BottomNavBar"
+        style="@style/MatchWrap"
+        android:layout_gravity="bottom"
         />
-</FrameLayout>
+
+</LinearLayout>
