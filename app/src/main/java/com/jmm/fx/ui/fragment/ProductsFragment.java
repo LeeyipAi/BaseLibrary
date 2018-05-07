@@ -1,14 +1,10 @@
 package com.jmm.fx.ui.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jmm.fx.R;
 
+import butterknife.BindView;
 import jmm.baselibrary.ui.fragment.BaseFragment;
 
 /**
@@ -22,16 +18,18 @@ import jmm.baselibrary.ui.fragment.BaseFragment;
  */
 public class ProductsFragment extends BaseFragment {
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_product, null);
-        return view;
+    @BindView(R.id.tv_product)
+    TextView mTvProduct;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_product;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void initView() {
+        mTvProduct.setText("商品库");
     }
+
 }

@@ -42,10 +42,22 @@ public abstract class BaseMvpFragment<T extends BasePresenter> extends BaseFragm
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initView();
+        loadData();
+    }
+
     /**
      *   Dagger注册
      */
     protected abstract void injectComponent();
+
+    /**
+     *   加载数据
+     */
+    protected abstract void loadData();
 
 
     // 初始Activity Component

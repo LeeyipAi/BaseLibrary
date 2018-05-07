@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <com.kennyc.view.MultiStateView
+        android:id="@+id/multiStateView"
+        style="@style/MatchMatch">
+
+        <cn.bingoogolapple.refreshlayout.BGARefreshLayout
+            android:id="@+id/bgaRefreshLayout"
+            style="@style/MatchMatch">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                style="@style/MatchMatch"
+                >
+
+            </android.support.v7.widget.RecyclerView>
+
+        </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
+
+    </com.kennyc.view.MultiStateView>
+
+
+</LinearLayout>

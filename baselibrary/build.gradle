@@ -56,7 +56,7 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:${dagger_version}"
 
     //log 拦截日志
-    api 'com.safframework.log:saf-logginginterceptor:1.1.0'
+    api 'com.github.LeeyipAi:Logginginterceptor:1.0.1'
 
     //RxLifecycle
     api "com.trello:rxlifecycle-kotlin:$rx_lifecycle_version"
@@ -67,6 +67,16 @@ dependencies {
 
     //底部导航
     api 'com.ashokvarma.android:bottom-navigation-bar:2.0.2'
+
+    //下拉刷新
+    api 'cn.bingoogolapple:bga-refreshlayout:1.1.8@aar'
+
+    //MulitStateView  多状态
+    api "com.github.Kennyc1012:MultiStateView:$multi_state_view_version"
+
+    //BaseRecyclerViewAdapterHelper
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

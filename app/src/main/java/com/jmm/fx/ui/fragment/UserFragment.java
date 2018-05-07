@@ -1,15 +1,20 @@
 package com.jmm.fx.ui.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.jmm.fx.R;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jmm.fx.test.IntegralDetails;
+import com.jmm.fx.ui.adapter.TestAdapter;
+import com.jmm.fx.usercenter.data.api.UserApi;
 
-import jmm.baselibrary.ui.fragment.BaseFragment;
+import java.util.List;
+
+import jmm.baselibrary.data.net.HttpParams;
+import jmm.baselibrary.data.net.RetrofitFactory;
+import jmm.baselibrary.ui.adapter.BaseRvAdapter;
+import jmm.baselibrary.ui.fragment.BaseRvFragment;
+import jmm.baselibrary.utils.RxUtils;
+import rx.Observable;
 
 /**
  * user:Administrator
@@ -20,18 +25,43 @@ import jmm.baselibrary.ui.fragment.BaseFragment;
 /*
     个人中心Fragment
  */
-public class UserFragment extends BaseFragment{
+public class UserFragment extends BaseRvFragment<IntegralDetails.Data.Entity> {
 
-    @Nullable
+
+    private String pageCount;
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_user,null);
+    protected String getCurrentPage() {
+        return pageCount;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected Observable<List<IntegralDetails.Data.Entity>> getApi(String currNum) {
+        return  RetrofitFactory.getInstance()
+                .creat(UserApi.class)
+                .getIntegralDetail(HttpParams.getJf("2670196097418240", currNum, String.valueOf(PAGE_SIZE)))
+                .compose(RxUtils.rxSchedulerHelper())
+                .doOnNext(integralDetails -> pageCount = integralDetails.getData().getPager().getTotalPage())
+                .map(integralDetails -> integralDetails.getData().getList());
+    }
+
+    @Override
+    protected BaseRvAdapter getRecyclerViewAdapter() {
+        return new TestAdapter();
+    }
+
+    @Override
+    protected void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
     }
+
+//    @Override
+//    protected int getLayoutId() {
+//        return R.layout.fragment_user;
+//    }
+//
+//    @Override
+//    protected void initView() {
+//
+//    }
 }
