@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/i_product"
+        android:checked="true"
+        android:icon="@drawable/selector_product"
+        android:title="@string/nav_bar_home" />
+
+    <item
+        android:id="@+id/i_notic"
+        android:icon="@drawable/selector_notic"
+        android:title="@string/nav_bar_notice" />
+    <item
+        android:id="@+id/i_order"
+        android:icon="@drawable/selector_order"
+        android:title="@string/nav_bar_order" />
+    <item
+        android:id="@+id/i_user"
+        android:icon="@drawable/selector_user"
+        android:title="@string/nav_bar_user" />
+</menu>

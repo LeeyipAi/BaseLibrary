@@ -2,6 +2,7 @@ package jmm.baselibrary.ui.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -11,8 +12,10 @@ import com.kennyc.view.MultiStateView;
 import java.util.List;
 
 import butterknife.BindView;
-import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
-import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 import jmm.baselibrary.R;
 import jmm.baselibrary.R2;
 import jmm.baselibrary.bean.LoadStatus;
@@ -25,12 +28,12 @@ import rx.Observable;
  * time:2018 05 07 10:34
  * package_name:jmm.baselibrary.ui.fragment
  */
-public abstract class BaseRvFragment<T> extends BaseFragment implements BGARefreshLayout.BGARefreshLayoutDelegate {
+public abstract class BaseRvFragment<T> extends BaseFragment {
 
     @BindView(R2.id.recyclerView)
     RecyclerView mRecyclerView;
-    @BindView(R2.id.bgaRefreshLayout)
-    BGARefreshLayout mBgaRefreshLayout;
+    @BindView(R2.id.ptrFrameLayout)
+    PtrClassicFrameLayout mPtrFrameLayout;
     @BindView(R2.id.multiStateView)
     MultiStateView mMultiStateView;
 
@@ -38,9 +41,7 @@ public abstract class BaseRvFragment<T> extends BaseFragment implements BGARefre
 
     protected int mPageCount;
     protected int mCurrentPage = 1;
-
     protected static int PAGE_SIZE = 10;
-    private BGANormalRefreshViewHolder mRefreshViewHolder;
 
     @Override
     protected int getLayoutId() {
@@ -50,8 +51,12 @@ public abstract class BaseRvFragment<T> extends BaseFragment implements BGARefre
     @Override
     protected void initView() {
         initRv();
-        initBgaRefreshLayout();
-        loadData(LoadStatus.LOADING);
+        initPtrFrameLayout();
+        initMultiStateView();
+    }
+
+    private void initMultiStateView() {
+        mMultiStateView.getView(MultiStateView.VIEW_STATE_ERROR).findViewById(R.id.msv_ll_error).setOnClickListener(v -> loadData(LoadStatus.LOADING));
     }
 
     /**
@@ -65,17 +70,28 @@ public abstract class BaseRvFragment<T> extends BaseFragment implements BGARefre
             mRecyclerView.addItemDecoration(getItemDecoration());
         }
         mRecyclerView.setAdapter(mRvAdapter);
+        mRvAdapter.setEnableLoadMore(true); //开启加载更多
+//        mRvAdapter.setLoadMoreView(new CustomLoadMoreView());     //自定义加载更多
+        mRvAdapter.setOnLoadMoreListener(() -> loadData(LoadStatus.MORE), mRecyclerView);//添加加载更多监听
+        mRvAdapter.setEmptyView(R.layout.layout_state_empty);
     }
 
     /**
      * 初始化下拉刷新控件
      */
-    private void initBgaRefreshLayout() {
-        mBgaRefreshLayout.setDelegate(this);
-        mRefreshViewHolder = new BGANormalRefreshViewHolder(getActivity(), true);
-        mRefreshViewHolder.setLoadMoreBackgroundColorRes(R.color.common_bg);
-        mRefreshViewHolder.setRefreshViewBackgroundColorRes(R.color.common_bg);
-        mBgaRefreshLayout.setRefreshViewHolder(mRefreshViewHolder);
+    private void initPtrFrameLayout() {
+        mPtrFrameLayout.setLastUpdateTimeRelateObject(this);
+        mPtrFrameLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                loadData(LoadStatus.REFRESH);
+            }
+        });
     }
 
     /**
@@ -88,6 +104,10 @@ public abstract class BaseRvFragment<T> extends BaseFragment implements BGARefre
                 mPageCount = Integer.parseInt(currentPage);
             }
             mCurrentPage = ++mCurrentPage;
+            if (mCurrentPage > mPageCount) {
+                mRvAdapter.loadMoreEnd();
+                return;
+            }
         } else {
             mCurrentPage = 1;
         }
@@ -98,44 +118,35 @@ public abstract class BaseRvFragment<T> extends BaseFragment implements BGARefre
                 super.onStart();
                 if (status == LoadStatus.LOADING) {
                     mRecyclerView.scrollToPosition(0);
-//                    vml.showLoadingView();
+                    mMultiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
                 }
             }
 
             @Override
             public void onNext(List<T> t) {
-                if (status == LoadStatus.MORE) {
-                    if (mCurrentPage >= mPageCount) {
-                        mRvAdapter.loadMoreEnd(); //没有更多数据了
-                    }
-                    mRvAdapter.addData(t);
-                } else {
-//                    vml.showContentView();
-                    mRvAdapter.setNewData(t); // 刷新或者第一次加载成功
-//                    }
-                    if (t.size() < PAGE_SIZE) {
-                        mRvAdapter.loadMoreEnd();
-                    }
-//                    if (!hasLoadMore()) {
-//                        mRvAdapter.loadMoreEnd();
-//                    }
-                }
                 switch (status) {
+                    case LOADING:
                     case REFRESH:
-//                        ptrFrameLayout.refreshComplete();//刷新完成
+                        mMultiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+                        if (t.size() < PAGE_SIZE) {
+                            mRvAdapter.loadMoreEnd();
+                        }
+                        mRvAdapter.setNewData(t); // 刷新或者第一次加载成功
+                        mPtrFrameLayout.refreshComplete();//刷新完成
+                        if (!hasLoadMore()) {
+                            mRvAdapter.loadMoreEnd();
+                        }
                         break;
                     case MORE:
-//                        mRvAdapter.loadMoreComplete(); // 加载更多完成
+                        mRvAdapter.addData(t);
+                        if (mCurrentPage >= mPageCount) {
+                            mRvAdapter.loadMoreEnd(); //没有更多数据了
+                        }
+                        mRvAdapter.loadMoreComplete(); // 加载更多完成
                         break;
                     default:
                         break;
                 }
-                mBgaRefreshLayout.endRefreshing();
-            }
-
-            @Override
-            public void onCompleted() {
-                super.onCompleted();
             }
 
             @Override
@@ -143,13 +154,13 @@ public abstract class BaseRvFragment<T> extends BaseFragment implements BGARefre
                 super.onError(e);
                 switch (status) {
                     case LOADING:
-//                        vml.showErrorView();//失败重试
+                        mMultiStateView.setViewState(MultiStateView.VIEW_STATE_ERROR);
                         break;
                     case REFRESH:
-//                        ptrFrameLayout.refreshComplete(); //下拉刷新完成
+                        mPtrFrameLayout.refreshComplete();//刷新完成
                         break;
                     case MORE:
-//                        mAdapter.loadMoreFail(); // 加载更多失败
+                        mRvAdapter.loadMoreFail(); // 加载更多失败
                         break;
                     default:
                         break;
@@ -158,20 +169,13 @@ public abstract class BaseRvFragment<T> extends BaseFragment implements BGARefre
         });
     }
 
-
     @Override
-    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-        loadData(LoadStatus.REFRESH);
+    protected void lazyFetchData() {
+        loadData(LoadStatus.LOADING);
     }
 
-    @Override
-    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-        if (mCurrentPage < 3) {
-            loadData(LoadStatus.MORE);
-            return true;
-        }else {
-            return false;
-        }
+    public boolean hasLoadMore() {
+        return true;
     }
 
     protected RecyclerView.ItemDecoration getItemDecoration() {

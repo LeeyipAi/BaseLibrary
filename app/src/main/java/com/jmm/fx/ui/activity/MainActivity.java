@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.FrameLayout;
 
-import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.jmm.fx.R;
 import com.jmm.fx.ui.fragment.NoticFragment;
 import com.jmm.fx.ui.fragment.OrderFragment;
@@ -19,14 +19,14 @@ import butterknife.ButterKnife;
 import jmm.baselibrary.ui.activity.BaseActivity;
 import jmm.baselibrary.utils.ActivityUtils;
 import jmm.baselibrary.utils.ToastUtils;
-import jmm.baselibrary.widgets.BottomNavBar;
+import jmm.baselibrary.widgets.BottomTabLayout;
 
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.fl_contaier)
     FrameLayout mFlContaier;
-    @BindView(R.id.BottomNavBar)
-    BottomNavBar mBottomNavBar;
+    @BindView(R.id.ctl_table)
+    BottomTabLayout mCtlTable;
     private Stack<Fragment> mStack = new Stack<Fragment>();
 
     private long pressTime = 0L;
@@ -42,9 +42,26 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initFragment();
-        initBottomNav();
+        initCommonTabLayout();
         changeFragment(0);
         loadNoticSize();
+    }
+
+    /*
+        初始化底部导航栏
+     */
+    private void initCommonTabLayout() {
+        mCtlTable.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelect(int position) {
+                changeFragment(position);
+            }
+
+            @Override
+            public void onTabReselect(int position) {
+
+            }
+        });
     }
 
     /*
@@ -65,28 +82,6 @@ public class MainActivity extends BaseActivity {
         mStack.add(mUserFragment);
     }
 
-    /*
-        初始化底部导航栏
-     */
-    private void initBottomNav() {
-
-        mBottomNavBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(int position) {
-                changeFragment(position);
-            }
-
-            @Override
-            public void onTabUnselected(int position) {
-
-            }
-
-            @Override
-            public void onTabReselected(int position) {
-
-            }
-        });
-    }
 
     /*
         导航栏切换
@@ -104,7 +99,10 @@ public class MainActivity extends BaseActivity {
         加载通知数量
      */
     private void loadNoticSize() {
-        mBottomNavBar.cherckNoticeBadge(0);
+        mCtlTable.setCtlBadge(0,0);
+        mCtlTable.setCtlBadge(1,9);
+        mCtlTable.setCtlBadge(2,99);
+        mCtlTable.setCtlBadge(3,999);
     }
 
     /*
@@ -116,7 +114,7 @@ public class MainActivity extends BaseActivity {
         if (time - pressTime > 2000) {
             ToastUtils.showShort("再按一次退出程序");
             pressTime = time;
-        }else {
+        } else {
             ActivityUtils.removeAllActivity(this);
         }
     }

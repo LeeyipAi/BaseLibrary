@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="bottom"
     style="@style/MatchMatch"
     tools:context=".ui.activity.MainActivity">
@@ -10,14 +11,23 @@
 
     <FrameLayout
         android:id="@+id/fl_contaier"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
-
-    <jmm.baselibrary.widgets.BottomNavBar
-        android:id="@+id/BottomNavBar"
-        style="@style/MatchWrap"
-        android:layout_gravity="bottom"
+        style="@style/MatchAuto"
         />
+
+    <View style="@style/DividerFixedHeight"/>
+
+    <jmm.baselibrary.widgets.BottomTabLayout
+        android:id="@+id/ctl_table"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/common_bg"
+        app:tl_iconHeight="23dp"
+        app:tl_iconWidth="23dp"
+        app:tl_indicator_height="0dp"
+        app:tl_iconMargin="0dp"
+        app:tl_textSelectColor="@color/btn_nav_text"
+        app:tl_textUnselectColor="@color/text_normal"
+        app:tl_textsize="12sp"/>
+
 
 </LinearLayout>

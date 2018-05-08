@@ -24,4 +24,9 @@ public class NoticFragment extends BaseFragment{
     protected void initView() {
 
     }
+
+    @Override
+    protected void lazyFetchData() {
+
+    }
 }

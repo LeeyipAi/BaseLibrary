@@ -6,10 +6,10 @@
 
     <com.kennyc.view.MultiStateView
         android:id="@+id/multiStateView"
-        style="@style/MatchMatch">
+        style="@style/MultiStateStyle">
 
-        <cn.bingoogolapple.refreshlayout.BGARefreshLayout
-            android:id="@+id/bgaRefreshLayout"
+        <in.srain.cube.views.ptr.PtrClassicFrameLayout
+            android:id="@+id/ptrFrameLayout"
             style="@style/MatchMatch">
 
             <android.support.v7.widget.RecyclerView
@@ -19,7 +19,7 @@
 
             </android.support.v7.widget.RecyclerView>
 
-        </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
+        </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
     </com.kennyc.view.MultiStateView>
 

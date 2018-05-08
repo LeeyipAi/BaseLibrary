@@ -75,9 +75,9 @@ public class RetrofitFactory {
         return new LoggingInterceptor.Builder()
                 .loggable(BuildConfig.DEBUG)
                 .request()
-                .requestTag("Request")
+                .requestTag("Request_Okhttp")
                 .response()
-                .responseTag("Response")
+                .responseTag("Response_Okhttp")
                 .addHeader("version", BuildConfig.VERSION_NAME)
                 .build();
     }

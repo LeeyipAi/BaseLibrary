@@ -9,6 +9,7 @@ import com.jmm.fx.usercenter.data.api.UserApi;
 
 import java.util.List;
 
+import jmm.baselibrary.bean.LoadStatus;
 import jmm.baselibrary.data.net.HttpParams;
 import jmm.baselibrary.data.net.RetrofitFactory;
 import jmm.baselibrary.ui.adapter.BaseRvAdapter;

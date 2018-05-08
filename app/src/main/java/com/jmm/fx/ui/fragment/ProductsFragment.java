@@ -32,4 +32,9 @@ public class ProductsFragment extends BaseFragment {
         mTvProduct.setText("商品库");
     }
 
+    @Override
+    protected void lazyFetchData() {
+
+    }
+
 }

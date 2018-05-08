@@ -5,4 +5,5 @@
     <string name="nav_bar_notice">通知</string>
     <string name="nav_bar_order">订单</string>
     <string name="nav_bar_user">我的</string>
+    <string name="coming_soon_tip">尽情期待...</string>
 </resources>

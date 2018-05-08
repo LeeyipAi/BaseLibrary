@@ -3,6 +3,7 @@ package jmm.baselibrary.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import butterknife.Unbinder;
 public abstract class BaseFragment extends RxFragment {
 
     private Unbinder mBind;
+    private boolean isViewPrepared; // 标识fragment视图已经初始化完毕
+    private boolean hasFetchData; // 标识已经触发过懒加载数据
 
     @Nullable
     @Override
@@ -32,12 +35,44 @@ public abstract class BaseFragment extends RxFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        isViewPrepared = true;
+        lazyFetchDataIfPrepared();
         initView();
     }
 
     protected abstract int getLayoutId();
 
     protected abstract void initView();
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.e("setUserVisibleHint","Lazy:" + isVisibleToUser);
+        if (isVisibleToUser) {
+            lazyFetchDataIfPrepared();
+        }
+    }
+
+    /**
+     * 进行懒加载
+     */
+    private void lazyFetchDataIfPrepared() {
+        // 用户可见fragment && 没有加载过数据 && 视图已经准备完毕
+        Log.e("lazyFetchDataIfPrepared","Lazy");
+        if (getUserVisibleHint() && !hasFetchData && isViewPrepared) {
+            hasFetchData = true;
+            Log.e("lazyFetchData","Lazy");
+            lazyFetchData();
+        }
+
+    }
+
+    /**
+     * 懒加载的方式获取数据，仅在满足fragment可见和视图已经准备好的时候调用一次
+     */
+    protected abstract void lazyFetchData();
+
 
     @Override
     public void onDestroyView() {
