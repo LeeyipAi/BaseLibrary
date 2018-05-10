@@ -1,2 +1,22 @@
 <resources>
+    <!-- Window黑色背景主题 -->
+    <style name="AppTheme.Black" parent="@style/AppTheme">
+        <item name="android:windowBackground">@color/common_black</item>
+    </style>
+
+    <style name="LightTheme" parent="@style/AppTheme">
+        <item name="colorPrimary">#63d64a</item>
+        <item name="colorPrimaryDark">#63d64a</item>
+        <item name="colorAccent">#8063d64a</item>
+        <item name="appbg">@color/common_white</item>
+    </style>
+
+    <style name="DarkTheme" parent="@style/AppTheme">
+        <item name="colorPrimary">#000000</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">#000000</item>
+        <item name="appbg">@color/common_blue</item>
+    </style>
+
+
 </resources>

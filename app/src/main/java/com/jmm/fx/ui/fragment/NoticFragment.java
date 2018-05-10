@@ -3,6 +3,7 @@ package com.jmm.fx.ui.fragment;
 import com.jmm.fx.R;
 
 import jmm.baselibrary.ui.fragment.BaseFragment;
+import jmm.baselibrary.utils.ToastUtils;
 
 /**
  * user:Administrator
@@ -27,6 +28,6 @@ public class NoticFragment extends BaseFragment{
 
     @Override
     protected void lazyFetchData() {
-
+        ToastUtils.showShort("NoticFragment");
     }
 }

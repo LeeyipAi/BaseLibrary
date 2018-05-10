@@ -5,9 +5,9 @@ import com.jmm.fx.usercenter.data.procotol.RegisterReq;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import jmm.baselibrary.data.net.RetrofitFactory;
 import jmm.baselibrary.data.procotol.BaseResp;
-import rx.Observable;
 
 /**
  * user:HBKJ

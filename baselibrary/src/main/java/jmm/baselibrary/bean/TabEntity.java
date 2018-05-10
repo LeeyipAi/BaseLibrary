@@ -6,6 +6,7 @@ import com.flyco.tablayout.listener.CustomTabEntity;
  * user:Administrator
  * time:2018 05 08 16:12
  * package_name:jmm.baselibrary.bean
+ * 首页导航栏的数据
  */
 public class TabEntity implements CustomTabEntity {
     public String title;

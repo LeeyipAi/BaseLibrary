@@ -1,10 +1,11 @@
 package jmm.baselibrary.utils;
 
+
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Author: 30453
@@ -12,17 +13,16 @@ import rx.schedulers.Schedulers;
  */
 public class RxUtils {
 
-    public static <T> Observable.Transformer<T, T> rxSchedulerHelper() {
+    public static <T> ObservableTransformer<T, T> rxSchedulerHelper() {
         return observable -> observable
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static <T> Observable.Transformer<T, T> rxClick(long milliseconds) {
+    public static <T> ObservableTransformer<T, T> rxClick(long milliseconds) {
         return observable -> observable
                 .throttleFirst(milliseconds, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 }

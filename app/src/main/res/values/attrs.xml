@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="appbg" format="reference"/>
+    <attr name="appbg1" format="reference"/>
+    <attr name="appbg2" format="reference"/>
+
+</resources>

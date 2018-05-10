@@ -9,13 +9,12 @@ import com.jmm.fx.usercenter.data.api.UserApi;
 
 import java.util.List;
 
-import jmm.baselibrary.bean.LoadStatus;
+import io.reactivex.Observable;
 import jmm.baselibrary.data.net.HttpParams;
 import jmm.baselibrary.data.net.RetrofitFactory;
 import jmm.baselibrary.ui.adapter.BaseRvAdapter;
 import jmm.baselibrary.ui.fragment.BaseRvFragment;
 import jmm.baselibrary.utils.RxUtils;
-import rx.Observable;
 
 /**
  * user:Administrator

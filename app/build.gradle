@@ -21,11 +21,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {//加上这写代码防止有2份rx.properties 打包冲突
+        pickFirst 'META-INF/*'
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
+
     //Dagger2
     api "com.google.dagger:dagger:${dagger_version}"
     annotationProcessor "com.google.dagger:dagger-compiler:${dagger_version}"

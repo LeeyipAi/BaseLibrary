@@ -6,7 +6,7 @@ import com.jmm.fx.usercenter.service.UserService;
 import javax.inject.Inject;
 
 import jmm.baselibrary.presenter.BasePresenter;
-import jmm.baselibrary.rx.BaseSubscriber;
+import jmm.baselibrary.rx.BaseObserver;
 import jmm.baselibrary.utils.RxUtils;
 
 /**
@@ -26,7 +26,7 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
     public void register(String mobile, String verifyCode, String pwd){
         mUserService.register(mobile,verifyCode,pwd)
                 .compose(RxUtils.rxSchedulerHelper())
-                .subscribe(new BaseSubscriber<Boolean>() {
+                .subscribe(new BaseObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean b) {
                         mView.onRegisterResult(b);

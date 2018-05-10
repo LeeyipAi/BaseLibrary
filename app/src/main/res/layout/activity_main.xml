@@ -9,8 +9,8 @@
     tools:context=".ui.activity.MainActivity">
 
 
-    <FrameLayout
-        android:id="@+id/fl_contaier"
+    <jmm.baselibrary.widgets.NoScrollViewPager
+        android:id="@+id/main_viewpager"
         style="@style/MatchAuto"
         />
 
@@ -19,15 +19,16 @@
     <jmm.baselibrary.widgets.BottomTabLayout
         android:id="@+id/ctl_table"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="48dp"
         android:background="@color/common_bg"
-        app:tl_iconHeight="23dp"
-        app:tl_iconWidth="23dp"
+        android:elevation="10dp"
+        app:tl_iconHeight="22dp"
+        app:tl_iconWidth="22dp"
         app:tl_indicator_height="0dp"
-        app:tl_iconMargin="0dp"
+        app:tl_iconMargin="2dp"
         app:tl_textSelectColor="@color/btn_nav_text"
-        app:tl_textUnselectColor="@color/text_normal"
-        app:tl_textsize="12sp"/>
-
+        app:tl_textUnselectColor="?attr/appbg"
+        app:tl_textsize="10dp"
+        />
 
 </LinearLayout>

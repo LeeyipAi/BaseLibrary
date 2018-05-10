@@ -5,9 +5,9 @@ import com.jmm.fx.usercenter.service.UserService;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import jmm.baselibrary.data.procotol.BaseResp;
-import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * user:HBKJ
@@ -26,14 +26,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Observable<Boolean> register(String mobile, String verifyCode, String pwd) {
         return mUserRepository.register(mobile, verifyCode, pwd)
-                .flatMap(new Func1<BaseResp<String>, Observable<Boolean>>() {
-                    @Override
-                    public Observable<Boolean> call(BaseResp<String> stringBaseResp) {
-                        if (!stringBaseResp.getStatus().equals("0")) {
-                            return Observable.just(false);
-                        }
-                        return Observable.just(true);
+                .flatMap((Function<BaseResp<String>, Observable<Boolean>>) stringBaseResp -> {
+                    if (!stringBaseResp.getStatus().equals("0")) {
+                        return Observable.just(false);
                     }
+                    return Observable.just(true);
                 });
     }
 }

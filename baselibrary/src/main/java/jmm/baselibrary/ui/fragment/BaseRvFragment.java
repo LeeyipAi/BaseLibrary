@@ -1,8 +1,8 @@
 package jmm.baselibrary.ui.fragment;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -16,12 +16,12 @@ import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+import io.reactivex.Observable;
 import jmm.baselibrary.R;
 import jmm.baselibrary.R2;
 import jmm.baselibrary.bean.LoadStatus;
-import jmm.baselibrary.rx.BaseSubscriber;
+import jmm.baselibrary.rx.BaseObserver;
 import jmm.baselibrary.ui.adapter.BaseRvAdapter;
-import rx.Observable;
 
 /**
  * user:Administrator
@@ -33,7 +33,7 @@ public abstract class BaseRvFragment<T> extends BaseFragment {
     @BindView(R2.id.recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R2.id.ptrFrameLayout)
-    PtrClassicFrameLayout mPtrFrameLayout;
+    protected PtrClassicFrameLayout mPtrFrameLayout;
     @BindView(R2.id.multiStateView)
     MultiStateView mMultiStateView;
 
@@ -57,18 +57,24 @@ public abstract class BaseRvFragment<T> extends BaseFragment {
 
     private void initMultiStateView() {
         mMultiStateView.getView(MultiStateView.VIEW_STATE_ERROR).findViewById(R.id.msv_ll_error).setOnClickListener(v -> loadData(LoadStatus.LOADING));
+        AnimationDrawable background = (AnimationDrawable) mMultiStateView.getView(MultiStateView.VIEW_STATE_LOADING).findViewById(R.id.loading_anim_view).getBackground();
+        background.start();
     }
 
     /**
      * 初始化RecyclerView
      */
     private void initRv() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener());
-        mRvAdapter = getRecyclerViewAdapter();
+        if (getLayoutManger() != null) {
+            mRecyclerView.setLayoutManager(getLayoutManger());
+        } else {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
         if (getItemDecoration() != null) {
             mRecyclerView.addItemDecoration(getItemDecoration());
         }
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener());
+        mRvAdapter = getRecyclerViewAdapter();
         mRecyclerView.setAdapter(mRvAdapter);
         mRvAdapter.setEnableLoadMore(true); //开启加载更多
 //        mRvAdapter.setLoadMoreView(new CustomLoadMoreView());     //自定义加载更多
@@ -111,16 +117,11 @@ public abstract class BaseRvFragment<T> extends BaseFragment {
         } else {
             mCurrentPage = 1;
         }
-        getApi(String.valueOf(mCurrentPage)).subscribe(new BaseSubscriber<List<T>>() {
-
-            @Override
-            public void onStart() {
-                super.onStart();
-                if (status == LoadStatus.LOADING) {
-                    mRecyclerView.scrollToPosition(0);
-                    mMultiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
-                }
-            }
+        if (status == LoadStatus.LOADING) {
+            mRecyclerView.scrollToPosition(0);
+            mMultiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
+        }
+        getApi(String.valueOf(mCurrentPage)).subscribe(new BaseObserver<List<T>>() {
 
             @Override
             public void onNext(List<T> t) {
@@ -143,6 +144,21 @@ public abstract class BaseRvFragment<T> extends BaseFragment {
                             mRvAdapter.loadMoreEnd(); //没有更多数据了
                         }
                         mRvAdapter.loadMoreComplete(); // 加载更多完成
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onComplete() {
+                super.onComplete();
+                switch (status) {
+                    case REFRESH:
+                        mPtrFrameLayout.refreshComplete();//刷新完成
+                        break;
+                    case MORE:
+                        mRvAdapter.loadMoreComplete(); // 加载结束
                         break;
                     default:
                         break;
@@ -179,6 +195,10 @@ public abstract class BaseRvFragment<T> extends BaseFragment {
     }
 
     protected RecyclerView.ItemDecoration getItemDecoration() {
+        return null;
+    }
+
+    protected RecyclerView.LayoutManager getLayoutManger() {
         return null;
     }
 

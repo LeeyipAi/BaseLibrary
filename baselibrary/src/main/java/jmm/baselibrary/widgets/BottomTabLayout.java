@@ -32,8 +32,8 @@ public class BottomTabLayout extends CommonTabLayout {
         init();
     }
 
-    /*
-        初始化
+    /**
+     * 初始化
      */
     private void init() {
         ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
@@ -45,6 +45,11 @@ public class BottomTabLayout extends CommonTabLayout {
     }
 
 
+    /**
+     * 设置BottomBar角标
+     * @param positon
+     * @param count
+     */
     public void setCtlBadge(int positon, int count) {
         getMsgView(positon).setBackgroundColor(UIUtils.getColor(R.color.common_blue_light));
         if (count > 0 && count < 10) {

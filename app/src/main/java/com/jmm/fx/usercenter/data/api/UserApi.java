@@ -5,12 +5,12 @@ import com.jmm.fx.usercenter.data.procotol.RegisterReq;
 
 import java.util.Map;
 
+import io.reactivex.Observable;
 import jmm.baselibrary.data.procotol.BaseResp;
 import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
-import rx.Observable;
 
 /**
  * user:HBKJ

@@ -12,6 +12,7 @@ import com.trello.rxlifecycle.components.support.RxFragment;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import jmm.baselibrary.rx.rxbus2.RxBus;
 
 /**
  * user:Administrator
@@ -35,6 +36,9 @@ public abstract class BaseFragment extends RxFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (!RxBus.getDefault().isRegistered(this)) {
+            RxBus.getDefault().register(this);
+        }
         isViewPrepared = true;
         lazyFetchDataIfPrepared();
         initView();
@@ -45,6 +49,7 @@ public abstract class BaseFragment extends RxFragment {
     protected abstract void initView();
 
 
+    //通过fragmentmanger add hide 次方法不调用
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -59,7 +64,7 @@ public abstract class BaseFragment extends RxFragment {
      */
     private void lazyFetchDataIfPrepared() {
         // 用户可见fragment && 没有加载过数据 && 视图已经准备完毕
-        Log.e("lazyFetchDataIfPrepared","Lazy");
+        Log.e("lazyFetchDataIfPrepared","Lazy:  " + getUserVisibleHint());
         if (getUserVisibleHint() && !hasFetchData && isViewPrepared) {
             hasFetchData = true;
             Log.e("lazyFetchData","Lazy");
@@ -77,6 +82,9 @@ public abstract class BaseFragment extends RxFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (RxBus.getDefault().isRegistered(this)) {
+            RxBus.getDefault().unregister(this);
+        }
         mBind.unbind();
     }
 }
